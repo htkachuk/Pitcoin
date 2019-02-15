@@ -8,7 +8,6 @@ import config as cnf
 
 PORT = None
 
-
 class Cli(cmd.Cmd):
 	def __init__(self):
 		cmd.Cmd.__init__(self)
@@ -23,15 +22,17 @@ class Cli(cmd.Cmd):
 		# self.mine = True
 		# self.utxo = utxo_set.Utxo_pool()
 
+	def mine(self):
+		chain = self.blockchain.chain
+		self.blockchain.mine(chain[0].hash)
+		print("New block hash", self.blockchain.chain[0].hash)
+
 	def do_mine(self, args):
 		"""mine - start mining process. Mine block with getting transactions 
 		from pending pool, adding coinbase transaction with miner address from a file,
 		calculation parameters like merkle root, hash and saving block in chain"""
 		while True:
-			chain = self.blockchain.chain
-			self.blockchain.mine(chain[0].hash)
-			print("New block hash", self.blockchain.chain[0].hash)
-
+			self.mine()
 	
 	def do_exit(self, args):
 		"""exit"""
