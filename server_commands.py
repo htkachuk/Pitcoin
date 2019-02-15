@@ -100,6 +100,29 @@ def utxo():
 		else:
 			return("Something get wrong!\nYou have no utxo in pool")
 
+@app.route('/block/new', methods=['POST'])
+def receive_new_block():
+	if request.method == 'POST':
+		next_transaction = request.get_json()
+		return(next_transaction)
+
+
+
+###################
+
+@app.route('/test', methods=['POST', 'GET'])
+def testtest():
+	if (request.method == 'POST'):
+		req = request.get_json()
+		print (req)
+	else:
+		return ("OK")
+	return ("OKOK")
+
+
+##################
+
+
 
 def main():
 	PORT = input("Choose port\n")
@@ -112,7 +135,7 @@ def main():
 			print("!!!Server port was saved in a file port.txt!!!")
 		except IOError:
 			print()
-		app.run(host='localhost', port=PORT, debug=False)
+		app.run(host='10.111.3.4', port=PORT, debug=False)
 	except (ValueError, PermissionError, OverflowError) as e:
 		print("Invalid port, stupid")
 
