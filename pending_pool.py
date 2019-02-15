@@ -1,0 +1,100 @@
+import tx_validator as tx
+import serializer
+import pickle
+import merkle
+import json
+import config
+import os
+import script
+
+def database(transaction):
+	try:
+		with open('pool.pickle', 'rb') as f:
+			last_data = pickle.load(f)
+		new_data = transaction + '\n' + last_data
+	except:
+		new_data = transaction
+	with open('pool.pickle', 'wb') as f:
+		pickle.dump(new_data, f)
+	return new_data
+
+def get_data(name):
+	try:
+		with open(name, 'rb') as f:
+	 		pending_data = pickle.load(f)
+	 		return pending_data
+	except:
+		return False
+
+def get_last_transactions(transactions, n):
+	last_transaction = []
+	if transactions.find('\n') == -1:
+		last_transaction.append(transactions)
+		return last_transaction
+	arr = transactions.split('\n')
+	j = len(arr)
+	if (j < n):
+		return arr
+	i = 0
+	for elem in arr:
+		if i < 3:
+			last_transaction.append(elem)
+		else:
+			break
+		i += 1
+	return last_transaction
+
+
+def remove_used_transactions(remove_from, used_data):
+	if remove_from.find('\n') != -1:
+		remove_from = remove_from.split('\n')
+		for elem in used_data:
+			try:
+				i = remove_from.index(elem)
+				del remove_from[i]
+			except:
+				i = 0
+		if len(remove_from) == 0:
+			print("-"*64)
+			os.remove('pool.pickle')
+	else:
+		os.remove('pool.pickle')
+	data = get_data('pool.pickle')
+	if data != False:
+		with open('pool.pickle', 'wb') as f:
+			new_data = ''
+			for elem in remove_from:
+				new_data += elem + '\n'
+			pickle.dump(new_data, f)
+
+def remove_from_pool(transaction):
+	pass
+
+def get_valid_transactions(n):
+	last_transaction = []
+	try:
+		with open('pool.pickle', 'rb') as f:
+			data = pickle.load(f)
+	except:
+		return '1'
+	last_transaction = get_last_transactions(data, 3)
+	for transaction in last_transaction:
+		if script.is_it_valid(transaction) == False:			
+			remove_from_pool(transaction)
+			get_valid_transactions(n)
+	remove_used_transactions(data, last_transaction)
+	return last_transaction
+
+def add_data(data, name):
+	data = json.dumps(data)
+	with open(name, 'wb') as f:
+	 	pickle.dump(data, f)
+
+
+def pool(transaction):
+	if valid.validation(transaction) == False:
+		print("Transaction is not valid")
+	else:
+		transactions = database(transaction)
+		# last_transaction = get_last_transactions(transactions)
+		# return last_transaction
