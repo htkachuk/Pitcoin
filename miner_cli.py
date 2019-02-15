@@ -31,6 +31,7 @@ class Cli(cmd.Cmd):
 		"""mine - start mining process. Mine block with getting transactions 
 		from pending pool, adding coinbase transaction with miner address from a file,
 		calculation parameters like merkle root, hash and saving block in chain"""
+		self.do_consensus()
 		while True:
 			self.mine()
 	
@@ -51,19 +52,25 @@ class Cli(cmd.Cmd):
 			print("usage\tadd_node ip:port")
 
 	def do_consensus(self, args):
-		req = pp.get_nodes_from_file()
-		req = requests.get("http://localhost:" + PORT + "/chain/length")
+		nodes = pp.read_nodes_from_file()
+		len_list = []
+		dicti = {}
+		print(nodes)
+		for x in nodes:
+			dicti = {}
+			dicti["ip"] = x
+			dicti["length"] = int(requests.get("http://" + x + "/chain/length").text)
+			len_list.append(dicti)
+		print(len_list)
+		newlist = sorted(len_list, key=lambda k: k['length']) 
+		print(newlist)
+		exit()
 		my_length = int(req.text)
-		for node in nodes:
-			print(node)
-			url = 'http://' + PORT + '/chain/length'
-			req = requests.get(url)
-			length = int(req.text)
-			if my_length < length:
-				my_length = length
-				req = requests.get("http://" + PORT + "/chain")
-				chain = json.loads(req.text)
-				pp.add_data(chain, 'blockchain.pickle')
+		if my_length < length:
+			my_length = length
+			req = requests.get("http://" + PORT + "/chain")
+			chain = json.loads(req.text)
+			pp.add_data(chain, 'blockchain.pickle')
 
 if __name__ == '__main__':
 	PORT = cnf.getPortFromFile()

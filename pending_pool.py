@@ -91,7 +91,10 @@ def read_nodes_from_file(node = "node"):
 		fd = open(node, 'r')
 		ret = fd.readlines()
 		fd.close()
-		return(ret)
+		nodes = []
+		for x in ret:
+			nodes.append(x.replace("\n", ""))
+		return(nodes)
 	except IOError:
 		print("Can't read from a node file")
 

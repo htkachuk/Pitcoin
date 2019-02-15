@@ -33,10 +33,9 @@ class Blockchain():
 		self.target = int("00000aaaaaaaaaaaaaaa00000000000000000000000000000000000000000000", 16)
 		self.diff = self.max_hash / self.target
 
-		self.chain, self.height = self.init_file('chain.pickle', 1)
-		self.node = self.init_file('node.pickle', 0)
-		print("init target = ", hex(self.target))
-		print("init diff = ", hex(int(self.diff)))
+		self.chain = []
+		self.height = 0#= self.init_file('chain.pickle', 1)
+		self.nodes = []#= self.init_file('node', 0)
 
 	def genesis_block(self):
 		new_block = block.Block()
@@ -103,7 +102,7 @@ class Blockchain():
 		else:
 			data = json.loads(data)
 			if t != 0:
-				height = data[0].height
+				height = data.chain[0].height
 		if t == 1:		
 			return data, height
 		else:
