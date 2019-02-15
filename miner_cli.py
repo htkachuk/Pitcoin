@@ -23,14 +23,13 @@ class Cli(cmd.Cmd):
 		"""mine - start mining process. Mine block with getting transactions 
 		from pending pool, adding coinbase transaction with miner address from a file,
 		calculation parameters like merkle root, hash and saving block in chain"""
-		while True:
-			chain_json = pp.get_data('chain.pickle')
-			if chain_json == False:
-				self.blockchain.genesis_block()
-			else:
-				chain = json.loads(chain_json)
-				self.blockchain.mine(chain[0]['hash'])
-				print("New block hash", self.blockchain.chain[0]['hash'])
+		chain_json = pp.get_data('chain.pickle')
+		if chain_json == False:
+			self.blockchain.genesis_block()
+		else:
+			chain = json.loads(chain_json)
+			self.blockchain.mine(chain[0]['hash'])
+			print("New block hash", self.blockchain.chain[0]['hash'])
 
 	
 	def do_exit(self, args):
