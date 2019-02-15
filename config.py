@@ -1,17 +1,12 @@
 import requests
 import json
+import pending_pool as pp
 
 def broadcast_to_friend(data, where):
-	try:
-		fd = open("port.txt", 'r')
-	except IOError:
-		print("Can't choose any port")
-		return (0)
-	port = fd.read()
-	
-	req = requests.get("http://localhost:" + port + "/nodes")
-	nodes = req.text
-	print(type(nodes))
+	nodes = []
+	ports = pp.read_nodes_from_file()
+	for x in ports:
+		nodes.append(x.replace("\n", ""))
 	for node in nodes:
 		print(node)
 		req = requests.post("http://" + node + where, json = data)

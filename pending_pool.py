@@ -86,7 +86,7 @@ def get_valid_transactions(n):
 	return last_transaction
 
 
-def read_nodes_from_file(node):
+def read_nodes_from_file(node = "node"):
 	try:
 		fd = open(node, 'r')
 		ret = fd.readlines()

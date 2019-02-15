@@ -40,8 +40,9 @@ def get_chain():
 def list_of_nodes():
 	if request.method == 'GET':
 		data = pending_pool.read_nodes_from_file('node')
+		ret = ''.join(data)
 		if data != False:
-			return str(data)
+			return (ret)
 		else:
 			return("Something get wrong!\nYou have no nodes")
 
@@ -105,8 +106,9 @@ def utxo():
 @app.route('/block/new', methods=['POST'])
 def receive_new_block():
 	if request.method == 'POST':
-		next_transaction = request.get_json()
-		return(next_transaction)
+		block = request.get_json()
+		return (block)
+	return ("OK")
 #####
 
 def main():

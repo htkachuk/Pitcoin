@@ -69,7 +69,7 @@ class Blockchain():
 		new_block = block.Block(prev_hash, self.height)
 		new_block.mine(self.target)
 		self.chain.insert(0, new_block)
-		config.broadcast_to_friend(new_block, '/new/block')
+		config.broadcast_to_friend(new_block, '/block/new')
 		pp.add_data(self, 'blockchain.pickle')
 		if len(self.chain) % 5 == 0:
 			self.reCalcDiff()

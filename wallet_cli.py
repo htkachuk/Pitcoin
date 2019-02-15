@@ -167,11 +167,9 @@ def create_hash(sender, recipient, amount):
 	return message
 
 def broadcast_command(transaction):
-	global PORT
-	print("port is", PORT)
-	requests.post("http://localhost:" + PORT + "/transaction/new", json = transaction)
+	# requests.post("http://" + port + "/transaction/new", json = transaction)
+	cnf.broadcast_to_friend(transaction, '/transaction/new')
 	print("Successfuly broadcasted")
-	config.broadcast_to_friend(transaction, '/transaction/new')
 
 def main():
 	PORT = cnf.getPortFromFile()

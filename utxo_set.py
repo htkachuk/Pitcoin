@@ -104,7 +104,7 @@ def get_utxo_set(which, address):
 		i = 0
 		utxo_set = pp.get_data('utxo.pickle')
 		if utxo_set != False:
-			utxo_set = json.loads(utxo_set)
+			# utxo_set = pickle.loads(utxo_set)
 			for elem in utxo_set:
 				if (elem['address'] == address):
 					utxo_set = elem['unspent_outputs']

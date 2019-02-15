@@ -51,8 +51,7 @@ class Cli(cmd.Cmd):
 			print("usage\tadd_node ip:port")
 
 	def do_consensus(self, args):
-		req = requests.get("http://localhost:" + PORT + "/nodes")
-		nodes = req.text
+		req = pp.get_nodes_from_file()
 		req = requests.get("http://localhost:" + PORT + "/chain/length")
 		my_length = int(req.text)
 		for node in nodes:
