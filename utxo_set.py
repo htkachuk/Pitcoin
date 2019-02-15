@@ -66,7 +66,6 @@ def del_from_pool(tx): #deserialiazed transaction
 	if utxo_set == False:
 		print("Empty utxo pool!!")
 		return
-	utxo_set = json.loads(utxo_set)
 	new_pool = []
 	for elem in tx['inputs']:
 		address = get_address(elem['ScriptSig'])
@@ -85,8 +84,6 @@ def del_from_pool(tx): #deserialiazed transaction
 
 def get_script(txid, vout):
 	utxo_set = pp.get_data('utxo.pickle')
-	utxo_set = json.loads(utxo_set)
-	print(utxo_set)
 	for utxo in utxo_set:
 		for unspent in utxo['unspent_outputs']:
 			# print(unspent['tx_hash_big_endian'])

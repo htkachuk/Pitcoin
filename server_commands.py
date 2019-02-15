@@ -1,4 +1,5 @@
 import sys
+import json
 import utxo_set
 import config
 import pending_pool
@@ -49,9 +50,8 @@ def list_of_nodes():
 @app.route('/chain/length', methods=['GET'])
 def chain_length():
 	if request.method == 'GET':
-		data = pending_pool.get_data('chain.pickle')
+		data = pending_pool.get_data('blockchain.pickle')
 	if data != False:
-		data = json.loads(data)
 		lens = str(data.chain[0].height)
 		return lens
 	else:
@@ -60,11 +60,10 @@ def chain_length():
 @app.route('/block/last', methods=['GET'])
 def last_block():
 	if request.method == 'GET':
-		data = pending_pool.get_data('chain.pickle')
+		data = pending_pool.get_data('blockchain.pickle')
 		if data != False:
-			data = json.loads(data)
 			block = data.chain[0]
-			return json.dumps(block)
+			return str(block)
 		else:
 			return("Something get wrong!\nYou have no chain")
 
@@ -74,11 +73,13 @@ def block_height():
 		height = str(request.args.get('height'))
 		data = pending_pool.get_data('blockchain.pickle')
 		if data != False:
-			data = json.loads(data)
 			i = len(data.chain) - 1
 			while(i >= 0):
 				if (int(data.chain[i].height) == int(height)):
-					return data[i]
+					return str(data.chain[i])
+				i -= 1
+		else:
+			return("kek")
 
 
 
@@ -95,9 +96,8 @@ def get_balance():
 def utxo():
 	if request.method == 'GET':
 		data = pending_pool.get_data('utxo.pickle')
-		print(data)
 		if data != False:
-			return data
+			return str(data)
 		else:
 			return("Something get wrong!\nYou have no utxo in pool")
 
@@ -106,7 +106,7 @@ def utxo():
 @app.route('/block/new', methods=['POST'])
 def receive_new_block():
 	if request.method == 'POST':
-		block = request.get_json()
+		block = request.get_data()
 		return (block)
 	return ("OK")
 #####
