@@ -135,7 +135,7 @@ def main():
 			print("!!!Server port was saved in a file port.txt!!!")
 		except IOError:
 			print()
-		app.run(host='10.111.3.4', port=PORT, debug=False)
+		app.run(host='0.0.0.0', port=PORT, debug=False)
 	except (ValueError, PermissionError, OverflowError) as e:
 		print("Invalid port, stupid")
 

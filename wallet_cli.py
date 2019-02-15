@@ -171,6 +171,7 @@ def broadcast_command(transaction):
 	print("port is", PORT)
 	requests.post("http://localhost:" + PORT + "/transaction/new", json = transaction)
 	print("Successfuly broadcasted")
+	config.broadcast_to_friend(transaction, '/transaction/new')
 
 def main():
 	PORT = cnf.getPortFromFile()

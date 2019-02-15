@@ -70,6 +70,7 @@ class Output():
 class Transaction():
 	def __init__(self, version, inputs, outputs, locktime, witness = 0):
 		self.version = get_int_lnf(version, 8)
+		print(self.version)
 		self.sigwit = 0
 		if witness != 0:
 			self.marker = '00'
