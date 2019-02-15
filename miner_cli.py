@@ -15,8 +15,12 @@ class Cli(cmd.Cmd):
 		self.prompt = "฿ "
 		self.intro  = "\t\tWelcome to the miner cli\nHow to use? 'help'!!"
 		self.doc_header ="For detail information use 'help _command_')"
-		self.blockchain = blockchain.Blockchain()
-		self.mine = True
+		self.blockchain = pp.get_data("blockchain.pickle")
+		if (self.blockchain == False):
+			self.blockchain = blockchain.Blockchain()
+			self.blockchain.genesis_block()
+
+		# self.mine = True
 		# self.utxo = utxo_set.Utxo_pool()
 
 	def do_mine(self, args):
@@ -24,13 +28,9 @@ class Cli(cmd.Cmd):
 		from pending pool, adding coinbase transaction with miner address from a file,
 		calculation parameters like merkle root, hash and saving block in chain"""
 		while True:
-			chain_json = pp.get_data('chain.pickle')
-			if chain_json == False:
-				self.blockchain.genesis_block()
-			else:
-				chain = json.loads(chain_json)
-				self.blockchain.mine(chain[0]['hash'])
-				print("New block hash", self.blockchain.chain[0]['hash'])
+			chain = self.blockchain.chain
+			self.blockchain.mine(chain[0].hash)
+			print("New block hash", self.blockchain.chain[0].hash)
 
 	
 	def do_exit(self, args):
@@ -51,7 +51,7 @@ class Cli(cmd.Cmd):
 
 	def do_consensus(self, args):
 		req = requests.get("http://localhost:" + PORT + "/nodes")
-		nodes = json.loads(req.text)
+		nodes = req.text
 		req = requests.get("http://localhost:" + PORT + "/chain/length")
 		my_length = int(req.text)
 		for node in nodes:
@@ -63,7 +63,7 @@ class Cli(cmd.Cmd):
 				my_length = length
 				req = requests.get("http://" + PORT + "/chain")
 				chain = json.loads(req.text)
-				pp.add_data(chain, 'chain.pickle')
+				pp.add_data(chain, 'blockchain.pickle')
 
 if __name__ == '__main__':
 	PORT = cnf.getPortFromFile()

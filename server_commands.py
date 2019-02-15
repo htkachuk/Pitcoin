@@ -2,7 +2,7 @@ import sys
 import utxo_set
 import config
 import pending_pool
-import json
+import pickle
 from flask import (
 	Flask,
 	request
@@ -29,9 +29,9 @@ def pending_transaction():
 @app.route('/chain', methods=['GET'])
 def get_chain():
 	if request.method == 'GET':
-		data = pending_pool.get_data('chain.pickle')
+		data = pending_pool.get_data('blockchain.pickle')
 		if data != False:
-			return data
+			return str(data.chain)
 		else:
 			return("Something get wrong!\nYou have no chain")
 		
@@ -39,9 +39,9 @@ def get_chain():
 @app.route('/nodes', methods=['GET'])
 def list_of_nodes():
 	if request.method == 'GET':
-		data = pending_pool.get_data('node.pickle')
+		data = pending_pool.read_nodes_from_file('node')
 		if data != False:
-			return data
+			return str(data)
 		else:
 			return("Something get wrong!\nYou have no nodes")
 
@@ -51,7 +51,7 @@ def chain_length():
 		data = pending_pool.get_data('chain.pickle')
 	if data != False:
 		data = json.loads(data)
-		lens = str(data[0]['height'])
+		lens = str(data.chain[0].height)
 		return lens
 	else:
 		return("0")
@@ -62,7 +62,7 @@ def last_block():
 		data = pending_pool.get_data('chain.pickle')
 		if data != False:
 			data = json.loads(data)
-			block = data[0]
+			block = data.chain[0]
 			return json.dumps(block)
 		else:
 			return("Something get wrong!\nYou have no chain")
@@ -71,12 +71,12 @@ def last_block():
 def block_height():
 	if request.method == 'GET':
 		height = str(request.args.get('height'))
-		data = pending_pool.get_data('chain.pickle')
+		data = pending_pool.get_data('blockchain.pickle')
 		if data != False:
 			data = json.loads(data)
-			i = len(data) -1
+			i = len(data.chain) - 1
 			while(i >= 0):
-				if (int(data[i]['height']) == int(height)):
+				if (int(data.chain[i].height) == int(height)):
 					return data[i]
 
 
@@ -100,29 +100,14 @@ def utxo():
 		else:
 			return("Something get wrong!\nYou have no utxo in pool")
 
+
+## TO DO
 @app.route('/block/new', methods=['POST'])
 def receive_new_block():
 	if request.method == 'POST':
 		next_transaction = request.get_json()
 		return(next_transaction)
-
-
-
-###################
-
-@app.route('/test', methods=['POST', 'GET'])
-def testtest():
-	if (request.method == 'POST'):
-		req = request.get_json()
-		print (req)
-	else:
-		return ("OK")
-	return ("OKOK")
-
-
-##################
-
-
+#####
 
 def main():
 	PORT = input("Choose port\n")

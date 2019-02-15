@@ -10,7 +10,8 @@ def broadcast_to_friend(data, where):
 	port = fd.read()
 	
 	req = requests.get("http://localhost:" + port + "/nodes")
-	nodes = json.loads(req.text)
+	nodes = req.text
+	print(type(nodes))
 	for node in nodes:
 		print(node)
 		req = requests.post("http://" + node + where, json = data)

@@ -39,7 +39,6 @@ def add_output(tx_output, n, tx_hash):
 	if utxo_set == False:
 		utxo_set = []
 	else:
-		utxo_set = json.loads(utxo_set)
 		lens = len(utxo_set)
 		for elem in utxo_set:
 			if (elem['address'] == tx_output['address']):

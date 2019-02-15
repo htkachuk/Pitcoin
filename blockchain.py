@@ -5,10 +5,25 @@ import ipaddress
 import json
 import config
 
-
-
+### FOR JSON
+def jsonDefault(OrderedDict):
+    return OrderedDict.__dict__
+### END JSON
 
 class Blockchain():
+	
+	### FOR JSON
+	def __repr__(self): 	
+		return json.dumps(self, default=jsonDefault, indent=4)
+	def toJSON(self):
+		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+	def add_record_as_data(self,_record):
+		self.__dict__.update(_record.__dict__)
+	def add_record_as_attr(self,_record):
+		self.record = _record
+	### END JSON
+
+
 	def __init__(self):
 		self.reward = 50
 		self.ideal_time = 60
@@ -26,11 +41,11 @@ class Blockchain():
 	def genesis_block(self):
 		new_block = block.Block()
 		new_block.mine(self.target)
-		self.chain.append(new_block.get_block())
-		pp.add_data(self.chain, 'chain.pickle')
+		self.chain.append(new_block)
+		pp.add_data(self, 'blockchain.pickle')
 
 	def reCalcDiff(self):
-		self.real_time = int(float(self.chain[0]['timestamp']) - float(self.chain[4]['timestamp']))
+		self.real_time = int(float(self.chain[0].timestamp) - float(self.chain[4].timestamp))
 		if self.real_time in range (self.ideal_time - 3, self.ideal_time + 3):
 			return 1
 		if self.real_time <= 0:
@@ -51,11 +66,11 @@ class Blockchain():
 
 	def mine(self, prev_hash):
 		self.height += 1
-		new_block = block.Block(prev_hash, self.height, reward = self.reward)
+		new_block = block.Block(prev_hash, self.height)
 		new_block.mine(self.target)
-		self.chain.insert(0, new_block.get_block())
-		config.broadcast_to_friend(new_block.get_block(), '/new/block')
-		pp.add_data(self.chain, 'chain.pickle')
+		self.chain.insert(0, new_block)
+		config.broadcast_to_friend(new_block, '/new/block')
+		pp.add_data(self, 'blockchain.pickle')
 		if len(self.chain) % 5 == 0:
 			self.reCalcDiff()
 		if (len(self.chain) % 10 == 0):
@@ -75,7 +90,7 @@ class Blockchain():
 			return(0)
 		if int(node.split(':')[1]) >= 1 and int(node.split(':')[1]) <= 65535:
 			self.node.append(node)
-			pp.add_data(self.node, 'node.pickle')
+			pp.add_node_to_file(node)
 			return(1)
 		else:
 			return(0)
@@ -88,7 +103,7 @@ class Blockchain():
 		else:
 			data = json.loads(data)
 			if t != 0:
-				height = data[0]['height']
+				height = data[0].height
 		if t == 1:		
 			return data, height
 		else:
@@ -107,11 +122,11 @@ def fromDiffToBits(diff):
 	return (res)
 
 if __name__ == '__main__':
-	# bc = Blockchain()
-	print()
+	bc = Blockchain()
+	print(bc)
+	print(type(bc))
 	# print(int("2815ee000000000000000000000000000000000000000000", 16))
-	print(floa)
-	print(fromDiffToBits(floa))
+	# print(floa)
 	# print(int(fromBitsToDiff("172e6f88"), 16))
 	# fromBitsToDiff("1d00ffff")
 	# print(15.1 > 15)

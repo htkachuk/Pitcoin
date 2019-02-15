@@ -1,4 +1,5 @@
 import config
+import json
 import tx_validator as tx
 import merkle
 from hashlib import sha256
@@ -9,9 +10,20 @@ import serializer
 import binascii
 import utxo_set
 
+def jsonDefault(OrderedDict):
+    return OrderedDict.__dict__
+
 class Block():
-	def __init__(self, previous_hash = 0, height = 0, reward = 50):
-		self.reward = reward
+	def __repr__(self): 	
+		return json.dumps(self, default=jsonDefault, indent=4)
+	def toJSON(self):
+		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+	def add_record_as_data(self,_record):
+		self.__dict__.update(_record.__dict__)
+	def add_record_as_attr(self,_record):
+		self.record = _record
+
+	def __init__(self, previous_hash = 0, height = 0):
 		self.height = height
 		self.transactions = []
 		self.timestamp = time.time()
@@ -35,8 +47,8 @@ class Block():
 			self.transactions = tx
 		self.get_hash()
 
-	def create_coinbase(self, height):
-		tx = transaction.CoinbaseTransaction(height, reward = self.reward)
+	def create_coinbase(self, height, reward = 50):
+		tx = transaction.CoinbaseTransaction(height, reward)
 		tx = tx.get_info()
 		ser_trans = serializer.Serializer.serializer(tx)
 		dtx = serializer.Deserializer.deserializer(ser_trans, 1)
@@ -63,13 +75,20 @@ class Block():
 		print("transactions =\t", self.transactions)
 		print("markle_root =\t", self.merkle)
 
-	def get_block(self):
-		block = {}
-		block['height'] = self.height
-		block['timestamp'] = str(self.timestamp)
-		block['nonce'] = self.nonce
-		block['previous_hash'] = self.previous_hash
-		block['hash'] = self.hash
-		block['transactions'] = self.transactions
-		block['root'] = self.merkle
-		return block
+	# def get_block(self):
+	# 	block = {}
+	# 	block['height'] = self.height
+	# 	block['timestamp'] = str(self.timestamp)
+	# 	block['nonce'] = self.nonce
+	# 	block['previous_hash'] = self.previous_hash
+	# 	block['hash'] = self.hash
+	# 	block['transactions'] = self.transactions
+	# 	block['root'] = self.merkle
+	# 	return block
+
+def main():
+	block = Block()
+	print(block)
+
+if __name__ == '__main__':
+	main()

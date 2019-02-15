@@ -55,7 +55,7 @@ def remove_used_transactions(remove_from, used_data):
 			except:
 				i = 0
 		if len(remove_from) == 0:
-			print("-"*64)
+			print("-" * 64)
 			os.remove('pool.pickle')
 	else:
 		os.remove('pool.pickle')
@@ -85,8 +85,28 @@ def get_valid_transactions(n):
 	remove_used_transactions(data, last_transaction)
 	return last_transaction
 
+
+def read_nodes_from_file(node):
+	try:
+		fd = open(node, 'r')
+		ret = fd.readlines()
+		fd.close()
+		return(ret)
+	except IOError:
+		print("Can't read from a node file")
+
+
+def add_node_to_file(node):
+	print(node)
+	try:
+		fd = open("node", 'a')
+		fd.write(str(node) + '\n')
+		fd.close()
+	except IOError:
+		print("Can't write to node file")
+
 def add_data(data, name):
-	data = json.dumps(data)
+	# data = json.dumps(data)
 	with open(name, 'wb') as f:
 	 	pickle.dump(data, f)
 
