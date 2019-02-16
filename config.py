@@ -5,8 +5,8 @@ import block
 import pending_pool as pp
 
 def broadcast_to_friend(data, where):
-	nodes = []
-	ports = pp.read_nodes_from_file()
+	nodes = [] 
+	nodes = pp.read_nodes_from_file()
 	if (type(data) is block.Block):
 		data = pickle.dumps(data)
 	for node in nodes:

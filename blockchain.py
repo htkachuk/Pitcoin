@@ -88,7 +88,7 @@ class Blockchain():
 		except ValueError:
 			return(0)
 		if int(node.split(':')[1]) >= 1 and int(node.split(':')[1]) <= 65535:
-			self.node.append(node)
+			# self.node.append(node)
 			pp.add_node_to_file(node)
 			return(1)
 		else:

@@ -14,16 +14,19 @@ app = Flask(__name__)
 @app.route('/transaction/new', methods=['POST'])
 def submit_tx():
 	if request.method == 'POST':
-		next_transaction = request.get_json()
+		next_transaction = request.get_data()
+		next_transaction = next_transaction.decode('utf-8')
+		print("Data ",next_transaction)
 		pending_pool.database(next_transaction)
-		return(next_transaction)
+		return(str(next_transaction))
 
 @app.route('/transaction/pending', methods=['GET'])
 def pending_transaction():
 	if request.method == 'GET':
 		data = pending_pool.get_data('pool.pickle')
+		print(data)
 		if data != False:
-			return data
+			return str(data)
 		else:
 			return("Something get wrong!\nYou have no transaction in pool")
 
@@ -110,6 +113,17 @@ def receive_new_block():
 		return (block)
 	return ("OK")
 #####
+
+@app.route('/getDifficulty', methods=['GET'])
+def get_difficulty():
+	if request.method == 'GET':
+		data = pending_pool.get_data('blockchain.pickle')
+		if data != False:
+			diff = data.diff
+			return str(diff)
+		else:
+			return("Something get wrong!\nYou have no chain")
+
 
 def main():
 	PORT = input("Choose port\n")

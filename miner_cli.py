@@ -31,7 +31,8 @@ class Cli(cmd.Cmd):
 		"""mine - start mining process. Mine block with getting transactions 
 		from pending pool, adding coinbase transaction with miner address from a file,
 		calculation parameters like merkle root, hash and saving block in chain"""
-		self.do_consensus()
+
+		# self.do_consensus(args)
 		while True:
 			self.mine()
 	
