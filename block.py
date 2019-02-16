@@ -23,8 +23,9 @@ class Block():
 	def add_record_as_attr(self,_record):
 		self.record = _record
 
-	def __init__(self, previous_hash = 0, height = 0):
+	def __init__(self, reward, previous_hash = 0, height = 0):
 		self.height = height
+		self.reward = reward
 		self.transactions = []
 		self.timestamp = time.time()
 		self.nonce = 0
@@ -35,7 +36,7 @@ class Block():
 			transactions = pending_pool.get_valid_transactions(3)
 			if transactions != '1':
 				self.transactions = transactions
-			tx = self.create_coinbase(self.height)
+			tx = self.create_coinbase(self.height, reward)
 			self.transactions.insert(0, tx)
 		if previous_hash == 0:
 			first_hash = sha256(bytes(self.transactions, 'utf-8')).hexdigest()

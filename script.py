@@ -127,11 +127,17 @@ def get_ser_transaction(cur_input, des, script, ser, raw = 0):
 	hash_tx = wallet.get_hash(byte_raw_tx)
 	return hash_tx
 
+def work_with_utxo(transaction):
+	des_transaction = serializer.Deserializer.deserializer(transaction, 0)
+	first_hash = sha256(bytes(transaction, 'utf-8')).hexdigest()
+	tx_hash = sha256(bytes(first_hash, 'utf-8')).hexdigest()
+	u.add_to_pool(des_transaction, tx_hash)
+	u.del_from_pool(des_transaction)	
+
+
 def is_it_valid(transaction):
 	if len(transaction) <= 0:
 		return True
-	print(len(transaction))
-	print(transaction)
 	des_transaction = serializer.Deserializer.deserializer(transaction, 0)
 	for inputi in des_transaction['inputs']:
 		txid = deepcopy(inputi['TXID'])
@@ -142,8 +148,4 @@ def is_it_valid(transaction):
 		tx = get_ser_transaction(inputi, des_transaction, script, transaction, 1)
 		if get_useful_data(inputi["ScriptSig"], script, tx) == False:
 			return False
-	first_hash = sha256(bytes(transaction, 'utf-8')).hexdigest()
-	tx_hash = sha256(bytes(first_hash, 'utf-8')).hexdigest()
-	u.add_to_pool(des_transaction, tx_hash)
-	u.del_from_pool(des_transaction)	
 	return True

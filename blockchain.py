@@ -38,7 +38,7 @@ class Blockchain():
 		self.nodes = []#= self.init_file('node', 0)
 
 	def genesis_block(self):
-		new_block = block.Block()
+		new_block = block.Block(reward = self.reward)
 		new_block.mine(self.target)
 		self.chain.append(new_block)
 		pp.add_data(self, 'blockchain.pickle')
@@ -65,7 +65,7 @@ class Blockchain():
 
 	def mine(self, prev_hash):
 		self.height += 1
-		new_block = block.Block(prev_hash, self.height)
+		new_block = block.Block(reward = self.reward, previous_hash = prev_hash, height = self.height)
 		new_block.mine(self.target)
 		self.chain.insert(0, new_block)
 		config.broadcast_to_friend(new_block, '/block/new')
@@ -74,12 +74,6 @@ class Blockchain():
 			self.reCalcDiff()
 		if (len(self.chain) % 10 == 0):
 			self.reward /= 2
-
-	def resolve_conflicts():
-		pass
-
-	def is_valid_chain():
-		pass
 
 	def add_node(self, node):
 		ip = node.split(':')[0]

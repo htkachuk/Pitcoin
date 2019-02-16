@@ -34,7 +34,19 @@ class Cli(cmd.Cmd):
 
 		# self.do_consensus(args)
 		while True:
-			self.mine()
+			try:
+				fd = open('mine', 'r')
+			except:
+				print("Mining has been stoped(((")
+				break
+			m = fd.readline()
+			if m == '3':
+				print("In file mine is '3', so it's time to do something else!\nFor starting mine process, please write in file mine '1' and start command mine")
+				return
+			while m == '1':
+				self.mine()
+				m = '0'
+				fd.close()
 	
 	def do_exit(self, args):
 		"""exit"""
@@ -56,22 +68,22 @@ class Cli(cmd.Cmd):
 		nodes = pp.read_nodes_from_file()
 		len_list = []
 		dicti = {}
-		print(nodes)
 		for x in nodes:
 			dicti = {}
 			dicti["ip"] = x
-			dicti["length"] = int(requests.get("http://" + x + "/chain/length").text)
+			try:
+				dicti["length"] = int(requests.get("http://" + x + "/chain/length").text)
+			except:
+				dicti["length"] = 0
 			len_list.append(dicti)
-		print(len_list)
 		newlist = sorted(len_list, key=lambda k: k['length']) 
-		print(newlist)
-		exit()
-		my_length = int(req.text)
-		if my_length < length:
-			my_length = length
-			req = requests.get("http://" + PORT + "/chain")
-			chain = json.loads(req.text)
+		if (newlist[-1]['ip'] != nodes[0]):
+			req = requests.get("http://" + newlist[-1]['ip'] + "/chain")
+			chain = req.text
+			req = requests.get("http://" + newlist[-1]['ip'] + "/utxo")
+			utxo = req.text
 			pp.add_data(chain, 'blockchain.pickle')
+			pp.add_data(utxo, 'utxo.pickle')
 
 if __name__ == '__main__':
 	PORT = cnf.getPortFromFile()

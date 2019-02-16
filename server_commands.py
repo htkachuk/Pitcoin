@@ -36,7 +36,11 @@ def get_chain():
 	if request.method == 'GET':
 		data = pending_pool.get_data('blockchain.pickle')
 		if data != False:
-			return str(data.chain)
+			if (type(data) == str):
+				data = json.loads(data)
+				print(data)
+				# return data.chain
+			return str(data)
 		else:
 			return("Something get wrong!\nYou have no chain")
 		
@@ -110,13 +114,32 @@ def utxo():
 @app.route('/block/new', methods=['POST'])
 def receive_new_block():
 	if request.method == 'POST':
-		block = request.get_data()
-		block = json.dumps(block.decode('utf-8'))
+		validator.mining(0)
+		block = request.form
 		if validator.block(block) == True:
-			pass
-		return (block)
-	return ("OK")
+			print("Good")
+			validator.consensus()
+		validator.mining(1)
+		return "OK"
+	# return ("OK")
 #####
+
+
+
+
+@app.route('/test', methods=['GET'])
+def only_test():
+	if request.method == 'GET':
+		data = pending_pool.get_data('blockchain.pickle')
+		if data != False:
+			block = data
+			return str(block)
+		else:
+			return("Something get wrong!\nYou have no chain")
+
+
+
+
 
 @app.route('/getDifficulty', methods=['GET'])
 def get_difficulty():

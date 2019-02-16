@@ -10,6 +10,7 @@ def broadcast_to_friend(data, where):
 	if (type(data) is block.Block):
 		a = data.__dict__
 		data = a
+	print(type(data))
 	print(data)
 	for node in nodes:
 		print(node)

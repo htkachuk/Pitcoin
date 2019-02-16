@@ -58,3 +58,7 @@ walletcli.do_send('-p ' + wallet.get_bitcoin_address_from_public_key(publkey_3) 
 walletcli.do_send('-p ' + wallet.get_bitcoin_address_from_public_key(publkey_1) + ' ' + str(10))
 walletcli.do_send('-p ' + wallet.get_bitcoin_address_from_public_key(publkey_2) + ' ' + str(10))
 walletcli.do_send('-p ' + wallet.get_bitcoin_address_from_public_key(publkey_3) + ' ' + str(10))
+
+
+for i in range(8):
+	minercli.mine()

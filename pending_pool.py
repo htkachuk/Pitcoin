@@ -82,6 +82,8 @@ def get_valid_transactions(n):
 		if script.is_it_valid(transaction) == False:			
 			remove_from_pool(transaction)
 			get_valid_transactions(n)
+		else:
+			script.work_with_utxo(transaction)
 	remove_used_transactions(data, last_transaction)
 	return last_transaction
 
