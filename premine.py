@@ -6,16 +6,16 @@ import wallet_cli
 privkey_1 = wallet.get_private_key()
 privkey_2 = wallet.get_private_key()
 privkey_3 = wallet.get_private_key()
-print(privkey_1)
-print(privkey_2)
-print(privkey_3)
+print("Privkey 1:",privkey_1)
+print("Privkey 2:",privkey_2)
+print("Privkey 3:",privkey_3)
 
 wif1 = wallet.convert_to_WIF(privkey_1).decode()
 wif2 = wallet.convert_to_WIF(privkey_2).decode()
 wif3 = wallet.convert_to_WIF(privkey_3).decode()
-print(wif1)
-print(wif2)
-print(wif3)
+print("WIF key 1:",wif1)
+print("WIF key 2:",wif2)
+print("WIF key 3:",wif3)
 
 with open('minerkey', 'w') as f:
 	f.write(wif1)

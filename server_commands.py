@@ -110,6 +110,8 @@ def utxo():
 def receive_new_block():
 	if request.method == 'POST':
 		block = request.get_data()
+		# block = json.dumps(block.decode('utf-8'))
+		# print(block)
 		return (block)
 	return ("OK")
 #####
