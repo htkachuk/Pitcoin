@@ -8,10 +8,15 @@ def broadcast_to_friend(data, where):
 	nodes = [] 
 	nodes = pp.read_nodes_from_file()
 	if (type(data) is block.Block):
-		data = pickle.dumps(data)
+		a = data.__dict__
+		data = a
+	print(data)
 	for node in nodes:
 		print(node)
-		req = requests.post("http://" + node + where, data = data)
+		try:
+			req = requests.post("http://" + node + where, data = data)
+		except:
+			print("Node has no connection")
 
 def getPortFromFile(file = "port.txt"):
 	try:

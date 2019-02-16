@@ -1,4 +1,5 @@
 import sys
+import validator
 import json
 import utxo_set
 import config
@@ -110,6 +111,9 @@ def utxo():
 def receive_new_block():
 	if request.method == 'POST':
 		block = request.get_data()
+		block = json.dumps(block.decode('utf-8'))
+		if validator.block(block) == True:
+			pass
 		return (block)
 	return ("OK")
 #####
