@@ -55,7 +55,7 @@ def list_of_nodes():
 @app.route('/chain/length', methods=['GET'])
 def chain_length():
 	if request.method == 'GET':
-		data = pending_pool.get_data('blockchain.pickle')
+		data = pending_pool.get_data_sas('blockchain.pickle')
 	if data != False:
 		lens = str(data.chain[0].height)
 		return lens

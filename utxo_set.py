@@ -1,4 +1,5 @@
 import transaction
+import pickle
 import pending_pool as pp
 import json
 import requests
@@ -93,9 +94,8 @@ def get_utxo_set(which, address):
 		utxo_set = json.loads(resp.text)["unspent_outputs"]
 	else:
 		i = 0
-		utxo_set = pp.get_data('utxo.pickle')
+		utxo_set = pp.get_data_sas('utxo.pickle')
 		if utxo_set != False:
-			# utxo_set = pickle.loads(utxo_set)
 			for elem in utxo_set:
 				if (elem['address'] == address):
 					utxo_set = elem['unspent_outputs']
