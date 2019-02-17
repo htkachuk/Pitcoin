@@ -13,11 +13,13 @@ def database(transaction):
 	try:
 		with open('pool.pickle', 'rb') as f:
 			last_data = pickle.load(f)
+			f.close()
 		new_data = transaction + '\n' + last_data
 	except:
 		new_data = transaction
 	with open('pool.pickle', 'wb') as f:
 		pickle.dump(new_data, f)
+		f.close()
 	return new_data
 
 
@@ -25,6 +27,7 @@ def get_data(name):
 	try:
 		with open(name, 'rb') as f:
 	 		pending_data = pickle.load(f)
+	 		f.close()
 	 		return pending_data
 	except:
 		return False
@@ -33,6 +36,7 @@ def get_data_sas(name):
 	try:
 		with open(name, 'rb') as f:
 	 		pending_data = pickle.loads(f)
+	 		f.close()
 	 		return pending_data
 	except:
 		return False
@@ -91,6 +95,7 @@ def get_valid_transactions(n):
 	try:
 		with open('pool.pickle', 'rb') as f:
 			data = pickle.load(f)
+			f.close()
 	except:
 		return '1'
 	last_transaction = get_last_transactions(data, 3)
@@ -132,11 +137,13 @@ def add_node_to_file(node):
 	except IOError:
 		print("Can't write to node file")
 
+
 def add_data(data, name):
 	# data = json.dumps(data
 	try:		
 		with open(name, 'wb') as f:
 	 		pickle.dump(data, f)
+	 		f.close()
 	except IOError as e:
 		print("fail to open file %s" %name)
 

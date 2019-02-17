@@ -114,27 +114,12 @@ def receive_new_block():
 		validator.mining(0)
 		block = request.form
 		if validator.block(block) == True:
-			print("Good")
-			print("SERVER____________________________")
+			# print("SERVER____________________________")
 			validator.consensus()
 		validator.mining(1)
 		return "OK"
-	# return ("OK")
+	return ("OK")
 #####
-
-
-
-
-@app.route('/test', methods=['GET'])
-def only_test():
-	if request.method == 'GET':
-		data = pending_pool.get_data('blockchain.pickle')
-		if data != False:
-			block = data
-			return str(block)
-		else:
-			return("Something get wrong!\nYou have no chain")
-
 
 
 

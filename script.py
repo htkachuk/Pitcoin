@@ -127,7 +127,6 @@ def get_ser_transaction(cur_input, des, script, ser, raw = 0):
 	return hash_tx
 
 def work_with_utxo(transaction):
-	print("Unx ", transaction)
 	des_transaction = serializer.Deserializer.deserializer(transaction, 0)
 	first_hash = sha256(bytes(transaction, 'utf-8')).hexdigest()
 	tx_hash = sha256(bytes(first_hash, 'utf-8')).hexdigest()

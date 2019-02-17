@@ -5,8 +5,6 @@ import json
 import requests
 import wallet
 import codecs
-import pprint
-
 
 def add_output(tx_output, n, tx_hash): 
 #####
@@ -28,9 +26,10 @@ def add_output(tx_output, n, tx_hash):
 		}]
 	}
 #####
-	ppr = pprint.PrettyPrinter()
+
 	i = 0
-	utxo_set = pp.get_data_sas('utxo.pickle')
+	utxo_set = pp.get_data('utxo.pickle')
+	# print("Utxo in add_output ",utxo_set)
 	if utxo_set == False:
 		utxo_set = []
 	else:
@@ -44,10 +43,12 @@ def add_output(tx_output, n, tx_hash):
 	pp.add_data(utxo_set, 'utxo.pickle')
 
 
+
 def add_to_pool(tx, tx_hash):
 	n = 0 #why do i live?
 	for output in tx['outputs']:
 		add_output(output, n, tx_hash)
+		n += 1
 
 def get_address(script):
 	sig_len = script[:2]
@@ -91,7 +92,7 @@ def get_script(txid, vout):
 def get_utxo_set(which, address):
 	if which == 'Testnet':
 		resp = requests.get('https://testnet.blockchain.info/unspent?active=%s' % address)
-		utxo_set = json.loads(resp.text)["unspent_outputs"]
+		utxo_set = json.load(resp.text)["unspent_outputs"]
 	else:
 		i = 0
 		utxo_set = pp.get_data_sas('utxo.pickle')
