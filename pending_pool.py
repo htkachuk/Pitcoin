@@ -59,7 +59,6 @@ def remove_used_transactions(remove_from, used_data):
 				i = 0
 		if len(remove_from) == 0:
 			os.remove('pool.pickle')
-		print("Remove ", remove_from)
 	else:
 		os.remove('pool.pickle')
 	data = get_data('pool.pickle')

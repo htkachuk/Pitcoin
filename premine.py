@@ -43,7 +43,7 @@ def createKeysAndAddresses():
 
 
 
-def premine_mode(pubkeys):
+def premine_mode(pubkeys, minercli):
 	addr1 = wallet.get_bitcoin_address_from_public_key(pubkeys[0])
 	addr2 = wallet.get_bitcoin_address_from_public_key(pubkeys[1])
 	addr3 = wallet.get_bitcoin_address_from_public_key(pubkeys[2])
@@ -56,7 +56,7 @@ def premine_mode(pubkeys):
 		f.write(addr3)
 
 	walletcli = wallet_cli.Cli()
-	minercli = miner_cli.Cli()
+	# minercli = miner_cli.Cli()
 
 	for i in range(2):
 		minercli.mine()
@@ -64,29 +64,29 @@ def premine_mode(pubkeys):
 	print("-----")
 	walletcli.do_import('wif1')
 	print("-----")
-	walletcli.do_send('-p ' + addr1 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr1 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr2 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr2 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr3 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr3 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr1 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr1 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr2 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr2 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr3 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr3 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr1 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr1 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr2 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr2 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr3 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr3 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr1 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr1 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr2 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr2 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
-	walletcli.do_send('-p ' + addr3 + ' ' + str(10))
+	walletcli.do_send('-p ' + addr3 + ' ' + str(1000000))
 	walletcli.do_broadcast("")
 
 	for i in range(8):

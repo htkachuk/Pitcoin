@@ -24,7 +24,7 @@ class Cli(cmd.Cmd):
 			self.blockchain.genesis_block()
 			if is_premine == True:
 				print("PREMINE IS ON")
-				premine.premine_mode(pubkeys)
+				premine.premine_mode(pubkeys, self)
 
 		# self.mine = True
 		# self.utxo = utxo_set.Utxo_pool()
@@ -32,7 +32,7 @@ class Cli(cmd.Cmd):
 	def mine(self):
 		chain = self.blockchain.chain
 		self.blockchain.mine(chain[0].hash)
-		print("New block hash", self.blockchain.chain[0].hash)
+		# print("New block hash", self.blockchain.chain[0].hash)
 
 	def do_mine(self, args):
 		"""mine - start mining process. Mine block with getting transactions 
