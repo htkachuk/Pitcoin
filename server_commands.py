@@ -17,7 +17,6 @@ def submit_tx():
 	if request.method == 'POST':
 		next_transaction = request.get_data()
 		next_transaction = next_transaction.decode('utf-8')
-		# print("Data ",next_transaction)
 		pending_pool.database(next_transaction)
 		return(str(next_transaction))
 
@@ -55,9 +54,12 @@ def list_of_nodes():
 @app.route('/chain/length', methods=['GET'])
 def chain_length():
 	if request.method == 'GET':
-		data = pending_pool.get_data_sas('blockchain.pickle')
+		data = pending_pool.get_data('blockchain.pickle')
 	if data != False:
-		lens = str(data.chain[0].height)
+		if type(data) is dict:
+				lens = str(data['chain'][0]['height'])
+			else:
+				lens = str(data.chain[0].height)
 		return lens
 	else:
 		return("0")
@@ -67,7 +69,10 @@ def last_block():
 	if request.method == 'GET':
 		data = pending_pool.get_data('blockchain.pickle')
 		if data != False:
-			block = data.chain[0]
+			if type(data) is dict:
+				block = data['chain'][0]
+			else:
+				block = data.chain[0]
 			return str(block)
 		else:
 			return("Something get wrong!\nYou have no chain")
@@ -86,8 +91,6 @@ def block_height():
 		else:
 			return("kek")
 
-
-
 @app.route('/balance', methods=['GET'])
 def get_balance():
 	if request.method == 'GET':
@@ -96,7 +99,6 @@ def get_balance():
 		print("set ", setik)
 		balance = utxo_set.check_balance(setik)
 		return('<h1>Your balance is <font color="red">' + str(balance) + '</font> satoshi</h1>')
-
 
 @app.route('/utxo', methods=['GET'])
 def utxo():
@@ -107,22 +109,16 @@ def utxo():
 		else:
 			return("Something get wrong!\nYou have no utxo in pool")
 
-
-## TO DO
 @app.route('/block/new', methods=['POST'])
 def receive_new_block():
 	if request.method == 'POST':
 		validator.mining(0)
 		block = request.form
 		if validator.block(block) == True:
-			# print("SERVER____________________________")
 			validator.consensus()
 		validator.mining(1)
 		return "OK"
 	return ("OK")
-#####
-
-
 
 
 @app.route('/getDifficulty', methods=['GET'])

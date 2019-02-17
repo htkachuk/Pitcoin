@@ -9,10 +9,10 @@ import miner_cli
 import requests
 import binascii
 from hashlib import sha256
+from ast import literal_eval
 
 
 def consensus():
-	print("I am here 1")
 	nodes = pp.read_nodes_from_file("node")
 	len_list = []
 	dicti = {}
@@ -38,9 +38,12 @@ def check_reward_target(coinbase, port, block_hash):
 	req = requests.get("http://" + port + "/chain")
 	if req.text == "Something get wrong!\nYou have no chain":
 		consensus()
-		return True
-	print("I am in check_reward_target")
-	chain = json.loads(req.text)
+		return False
+	try:
+		chain = json.loads(req.text)
+	except:
+		consensus()
+		return False
 	reward = int(chain['reward'])
 	reward = reward * pow(10, 8)
 	tx = sr.Deserializer.deserializer(coinbase, 1)
@@ -54,9 +57,13 @@ def check_reward_target(coinbase, port, block_hash):
 
 def get_last_block(port):
 	req = requests.get("http://" + port + "/block/last")
-	if  req.text == 'Something get wrong! You have no chain':
+	if  req.text == 'Something get wrong!\nYou have no chain':
+		consensus()
 		return False
-	last_block = json.loads(req.text)
+	try:
+		last_block = json.loads(req.text)
+	except:
+		return False
 	return last_block
 
 def block(block):
@@ -75,14 +82,6 @@ def block(block):
 	merkle_norm = binascii.hexlify(merkle.create_merkle_tree(block['transactions'])).decode('utf-8')
 	if (merkle_norm != block['merkle'][0]):
 		return False
-
-	# data_for_hash =  bytes(str(block['timestamp'][0]) + str(block['nonce'][0]) + str(block['previous_hash'][0]) + str(block['transactions']) + str(['merkle'][0]), 'utf-8')
-	# hash_norm =  sha256(data_for_hash).hexdigest()
-	# print(hash_norm)
-	# print(block['hash'][0])
-	# if (hash_norm != block['hash'][0]):
-	# 	return False
-	# print("Hash passsed")
 	if (len(block['transactions']) > 1):
 		txs = deepcopy(block['transactions'])
 		i = 0
