@@ -8,6 +8,7 @@ import os
 import script
 from copy import deepcopy
 
+
 def database(transaction):
 	try:
 		with open('pool.pickle', 'rb') as f:
@@ -19,6 +20,7 @@ def database(transaction):
 		pickle.dump(new_data, f)
 	return new_data
 
+
 def get_data(name):
 	try:
 		with open(name, 'rb') as f:
@@ -26,6 +28,7 @@ def get_data(name):
 	 		return pending_data
 	except:
 		return False
+
 
 def get_last_transactions(transactions, n):
 	last_transaction = []
@@ -92,7 +95,6 @@ def get_valid_transactions(n):
 			remove_from_pool(tx)
 			get_valid_transactions(n)
 		else:
-			print('Trans  ',tx1)
 			if (tx1 != ''):
 				script.work_with_utxo(tx1)
 	remove_used_transactions(data, last_transaction)
@@ -110,6 +112,7 @@ def read_nodes_from_file(node = "node"):
 		return(nodes)
 	except IOError:
 		print("Can't read from a node file")
+		return (False)
 
 
 def add_node_to_file(node):

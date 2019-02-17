@@ -151,20 +151,24 @@ def get_difficulty():
 
 
 def main():
-	PORT = input("Choose port\n")
-	try:
-		val = int(PORT)
+	ip = pending_pool.read_nodes_from_file()
+	if ip == False:
+		PORT = input("Choose port\n")
 		try:
-			fd = open("port.txt", 'w')
-			fd.write(PORT)
-			fd.close()
-			pending_pool.add_node_to_file("0.0.0.0:" + PORT)
-			print("!!!Server port was saved in a file port.txt!!!")
-		except IOError:
-			print()
-		app.run(host='0.0.0.0', port=PORT, debug=False)
-	except (ValueError, PermissionError, OverflowError) as e:
-		print("Invalid port, stupid")
+			val = int(PORT)
+			try:
+				fd = open("port.txt", 'w')
+				fd.write(PORT)
+				fd.close()
+				pending_pool.add_node_to_file("0.0.0.0:" + PORT)
+				app.run(host='0.0.0.0', port=PORT, debug=False)
+				print("!!!Server port was saved in a file port.txt!!!")
+			except IOError:
+				print("IOError")
+		except (ValueError, PermissionError, OverflowError) as e:
+			print("Invalid port, stupid")
+	else:
+		app.run(host=ip[0][:7], port=ip[0][8:13], debug=False)
 
 if __name__ == '__main__':
 	main()	

@@ -44,9 +44,9 @@ def add_output(tx_output, n, tx_hash):
 
 
 def add_to_pool(tx, tx_hash):
-	# n = 0 why do i live?
+	n = 0 #why do i live?
 	for output in tx['outputs']:
-		add_output(output, 0, tx_hash)
+		add_output(output, n, tx_hash)
 
 def get_address(script):
 	sig_len = script[:2]

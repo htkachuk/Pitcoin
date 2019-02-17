@@ -12,7 +12,7 @@ from hashlib import sha256
 
 
 def consensus():
-	nodes = pp.read_nodes_from_file()
+	nodes = pp.read_nodes_from_file("node")
 	len_list = []
 	dicti = {}
 	for x in nodes:
@@ -39,7 +39,7 @@ def check_reward_target(coinbase, port, block_hash):
 		consensus()
 		return True
 	chain = json.loads(req.text)
-	reward = float(chain['reward'])
+	reward = int(chain['reward'])
 	reward = reward * pow(10, 8)
 	tx = sr.Deserializer.deserializer(coinbase, 1)
 	if tx['outputs'][0]['Value'] > reward:
@@ -59,11 +59,11 @@ def get_last_block(port):
 
 def block(block):
 	block = block.to_dict(flat=False)
-	ports = pp.read_nodes_from_file()
-	port = ports[0]
-	if check_reward_target(block['transactions'][0], port, block['hash'][0]) == False:
+	nodes = pp.read_nodes_from_file()
+	my_node = nodes[0]
+	if check_reward_target(block['transactions'][0], my_node, block['hash'][0]) == False:
 		return False
-	last_block = get_last_block(port)
+	last_block = get_last_block(my_node)
 	if (last_block == False):
 		return False
 	if last_block['hash'] != block['previous_hash'][0]:
