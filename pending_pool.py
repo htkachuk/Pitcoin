@@ -24,7 +24,7 @@ def database(transaction):
 def get_data(name):
 	try:
 		with open(name, 'rb') as f:
-	 		pending_data = pickle.load(f)
+	 		pending_data = pickle.loads(f)
 	 		return pending_data
 	except:
 		return False

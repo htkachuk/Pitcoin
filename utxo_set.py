@@ -4,7 +4,7 @@ import json
 import requests
 import wallet
 import codecs
-
+import pprint
 
 
 def add_output(tx_output, n, tx_hash): 
@@ -27,7 +27,7 @@ def add_output(tx_output, n, tx_hash):
 		}]
 	}
 #####
-
+	ppr = pprint.PrettyPrinter()
 	i = 0
 	utxo_set = pp.get_data('utxo.pickle')
 	if utxo_set == False:

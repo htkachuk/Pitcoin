@@ -55,6 +55,7 @@ class Block():
 		dtx = serializer.Deserializer.deserializer(ser_trans, 1)
 		first_hash = sha256(bytes(ser_trans, 'utf-8')).hexdigest()
 		hash_tx = sha256(bytes(first_hash, 'utf-8')).hexdigest()
+		# print(type(dtx))
 		utxo_set.add_to_pool(dtx, hash_tx)
 		return ser_trans
 	
