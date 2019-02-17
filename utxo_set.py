@@ -29,7 +29,7 @@ def add_output(tx_output, n, tx_hash):
 #####
 	ppr = pprint.PrettyPrinter()
 	i = 0
-	utxo_set = pp.get_data('utxo.pickle')
+	utxo_set = pp.get_data_sas('utxo.pickle')
 	if utxo_set == False:
 		utxo_set = []
 	else:
