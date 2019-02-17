@@ -93,6 +93,7 @@ def get_balance():
 	if request.method == 'GET':
 		addr = str(request.args.get('addr'))
 		setik = utxo_set.get_utxo_set("Pitcoin", addr)
+		print("set ", setik)
 		balance = utxo_set.check_balance(setik)
 		return('<h1>Your balance is <font color="red">' + str(balance) + '</font> satoshi</h1>')
 

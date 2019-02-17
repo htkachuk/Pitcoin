@@ -95,7 +95,7 @@ def get_utxo_set(which, address):
 		utxo_set = json.load(resp.text)["unspent_outputs"]
 	else:
 		i = 0
-		utxo_set = pp.get_data_sas('utxo.pickle')
+		utxo_set = pp.get_data('utxo.pickle')
 		if utxo_set != False:
 			for elem in utxo_set:
 				if (elem['address'] == address):
