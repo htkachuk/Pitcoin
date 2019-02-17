@@ -37,8 +37,6 @@ def get_chain():
 		if data != False:
 			if (type(data) == str):
 				data = json.loads(data)
-				print(data)
-				# return data.chain
 			return str(data)
 		else:
 			return("Something get wrong!\nYou have no chain")

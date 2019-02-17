@@ -66,7 +66,6 @@ def getFullPubKeyFromCompressed(comp_key:  bytearray):
 def do_checksig(s, message):
 	compressed_pubkey = bytearray.fromhex(s.pop())
 	pubkey = getFullPubKeyFromCompressed(compressed_pubkey)
-	print(pubkey)
 	sig = s.pop()
 	sig = codecs.decode(sig, 'hex')
 	vk = ecdsa.VerifyingKey.from_string(pubkey[1:], curve=ecdsa.SECP256k1)
@@ -128,6 +127,7 @@ def get_ser_transaction(cur_input, des, script, ser, raw = 0):
 	return hash_tx
 
 def work_with_utxo(transaction):
+	print("Unx ", transaction)
 	des_transaction = serializer.Deserializer.deserializer(transaction, 0)
 	first_hash = sha256(bytes(transaction, 'utf-8')).hexdigest()
 	tx_hash = sha256(bytes(first_hash, 'utf-8')).hexdigest()

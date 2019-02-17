@@ -4,19 +4,11 @@ import json
 import requests
 import wallet
 import codecs
-#deserialazed transaction output, vout, hash of it
-def add_output(tx_output, n, tx_hash): 
 
-#utxo_set = {'address':some_addr
-#								{'unspent_outputs':[
-#													{'tx_hash_big_endian':
-#													 'tx_output_n':
-#													  'script':
-#													  'value':
-#													 }
-#													]
-#								}
-#			}
+
+
+def add_output(tx_output, n, tx_hash): 
+#####
 
 	new_data = {
 		'tx_hash_big_endian':tx_hash,
@@ -34,12 +26,14 @@ def add_output(tx_output, n, tx_hash):
 			'value':tx_output['Value']
 		}]
 	}
+#####
+
 	i = 0
 	utxo_set = pp.get_data('utxo.pickle')
 	if utxo_set == False:
 		utxo_set = []
 	else:
-		lens = len(utxo_set)
+		# lens = len(utxo_set) ЗАЧЕМ????
 		for elem in utxo_set:
 			if (elem['address'] == tx_output['address']):
 				i = 1
@@ -50,9 +44,9 @@ def add_output(tx_output, n, tx_hash):
 
 
 def add_to_pool(tx, tx_hash):
-	n = 0
+	# n = 0 why do i live?
 	for output in tx['outputs']:
-		add_output(output, n, tx_hash)
+		add_output(output, 0, tx_hash)
 
 def get_address(script):
 	sig_len = script[:2]

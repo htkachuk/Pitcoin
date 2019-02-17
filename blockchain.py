@@ -30,7 +30,7 @@ class Blockchain():
 		self.real_time = 15
 		self.max_hash = int("f" * 64, 16)
 		self.bits = 0
-		self.target = int("00000aaaaaaaaaaaaaaa00000000000000000000000000000000000000000000", 16)
+		self.target = int("0000aaaaaaaaaaaaaaaa00000000000000000000000000000000000000000000", 16)
 		self.diff = self.max_hash / self.target
 
 		self.chain = []

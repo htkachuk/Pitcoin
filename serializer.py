@@ -69,13 +69,16 @@ class Deserializer():
 				i = i + 8
 		else:
 			i = 230
+		# print(string[230:])
 		j = i + 2
 		transaction['output_count'] = string[i:j]
 		transaction['outputs'] = []
+		# print("How much outputs: ", int(transaction['output_count'], 16))
 		for elem in range(int(transaction['output_count'], 16)):
 			output = {}
 			i = j
 			j = i + 16
+			# print("KEK LOL", string[i:j])
 			output['Value'] = int(check_par(return_to_normal_form(string[i:j])), 16)
 			i = j
 			j = i + 2

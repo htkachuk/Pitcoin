@@ -4,6 +4,7 @@ import script
 import serializer as sr
 from copy import deepcopy
 import json
+import pickle
 import miner_cli
 import requests
 import binascii
@@ -28,14 +29,13 @@ def consensus():
 		chain = req.text
 		req = requests.get("http://" + newlist[-1]['ip'] + "/utxo")
 		utxo = req.text
-		pp.add_data(chain, 'blockchain.pickle')
-		pp.add_data(utxo, 'utxo.pickle')
+		pp.add_data(pickle.dumps(chain), 'blockchain.pickle')
+		pp.add_data(pickle.dumps(utxo), 'utxo.pickle')
 
 
 def check_reward_target(coinbase, port, block_hash):
 	req = requests.get("http://" + port + "/chain")
 	if req.text == "Something get wrong!\nYou have no chain":
-		print("ASFKASFOASF____________________")
 		consensus()
 		return True
 	chain = json.loads(req.text)
@@ -52,6 +52,8 @@ def check_reward_target(coinbase, port, block_hash):
 
 def get_last_block(port):
 	req = requests.get("http://" + port + "/block/last")
+	if  req.text == 'Something get wrong! You have no chain':
+		return False
 	last_block = json.loads(req.text)
 	return last_block
 
@@ -62,8 +64,9 @@ def block(block):
 	if check_reward_target(block['transactions'][0], port, block['hash'][0]) == False:
 		return False
 	last_block = get_last_block(port)
+	if (last_block == False):
+		return False
 	if last_block['hash'] != block['previous_hash'][0]:
-		print("BLOCK_______________________")
 		consensus()
 	if float(last_block['timestamp']) > float(block['timestamp'][0]):
 		return False

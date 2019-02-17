@@ -92,7 +92,9 @@ def get_valid_transactions(n):
 			remove_from_pool(tx)
 			get_valid_transactions(n)
 		else:
-			script.work_with_utxo(tx1)
+			print('Trans  ',tx1)
+			if (tx1 != ''):
+				script.work_with_utxo(tx1)
 	remove_used_transactions(data, last_transaction)
 	return last_transaction
 
@@ -120,9 +122,12 @@ def add_node_to_file(node):
 		print("Can't write to node file")
 
 def add_data(data, name):
-	# data = json.dumps(data)
-	with open(name, 'wb') as f:
-	 	pickle.dump(data, f)
+	# data = json.dumps(data
+	try:		
+		with open(name, 'wb') as f:
+	 		pickle.dump(data, f)
+	except IOError as e:
+		print("fail to open file %s" %name)
 
 
 def pool(transaction):
