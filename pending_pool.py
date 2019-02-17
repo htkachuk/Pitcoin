@@ -112,7 +112,7 @@ def read_nodes_from_file(node = "node"):
 
 
 def add_node_to_file(node):
-	print(node)
+	# print(node)
 	try:
 		fd = open("node", 'a')
 		fd.write(str(node) + '\n')

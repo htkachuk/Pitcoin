@@ -159,9 +159,7 @@ def main():
 			fd = open("port.txt", 'w')
 			fd.write(PORT)
 			fd.close()
-			fd = open("node", "w")
-			fd.write("0.0.0.0:" + PORT)
-			fd.close()
+			pending_pool.add_node_to_file("0.0.0.0:" + PORT)
 			print("!!!Server port was saved in a file port.txt!!!")
 		except IOError:
 			print()
