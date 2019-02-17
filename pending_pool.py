@@ -6,6 +6,7 @@ import json
 import config
 import os
 import script
+from copy import deepcopy
 
 def database(transaction):
 	try:
@@ -29,6 +30,8 @@ def get_data(name):
 def get_last_transactions(transactions, n):
 	last_transaction = []
 	if transactions.find('\n') == -1:
+		if transactions == '\n':
+			return ''
 		last_transaction.append(transactions)
 		return last_transaction
 	arr = transactions.split('\n')
@@ -55,8 +58,8 @@ def remove_used_transactions(remove_from, used_data):
 			except:
 				i = 0
 		if len(remove_from) == 0:
-			print("-" * 64)
 			os.remove('pool.pickle')
+		print("Remove ", remove_from)
 	else:
 		os.remove('pool.pickle')
 	data = get_data('pool.pickle')
@@ -64,6 +67,9 @@ def remove_used_transactions(remove_from, used_data):
 		with open('pool.pickle', 'wb') as f:
 			new_data = ''
 			for elem in remove_from:
+				if elem == '':
+					os.remove('pool.pickle')
+					return
 				new_data += elem + '\n'
 			pickle.dump(new_data, f)
 
@@ -78,12 +84,16 @@ def get_valid_transactions(n):
 	except:
 		return '1'
 	last_transaction = get_last_transactions(data, 3)
+	if last_transaction == "":
+		return '1'
 	for transaction in last_transaction:
-		if script.is_it_valid(transaction) == False:			
-			remove_from_pool(transaction)
+		tx = deepcopy(transaction)
+		tx1 = deepcopy(transaction)
+		if script.is_it_valid(tx) == False:			
+			remove_from_pool(tx)
 			get_valid_transactions(n)
 		else:
-			script.work_with_utxo(transaction)
+			script.work_with_utxo(tx1)
 	remove_used_transactions(data, last_transaction)
 	return last_transaction
 

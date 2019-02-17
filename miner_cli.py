@@ -3,21 +3,28 @@ import blockchain
 import server_commands
 import pending_pool as pp
 import json
+import argparse
 import requests
+import premine
 import config as cnf
 
 PORT = None
 
 class Cli(cmd.Cmd):
-	def __init__(self):
+	def __init__(self, is_premine = 0):
 		cmd.Cmd.__init__(self)
 		self.prompt = "฿ "
 		self.intro  = "\t\tWelcome to the miner cli\nHow to use? 'help'!!"
 		self.doc_header ="For detail information use 'help _command_')"
 		self.blockchain = pp.get_data("blockchain.pickle")
-		if (self.blockchain == False):
+		if (self.blockchain == False or is_premine == True):
 			self.blockchain = blockchain.Blockchain()
+			if is_premine == True:
+				pubkeys = premine.createKeysAndAddresses()
 			self.blockchain.genesis_block()
+			if is_premine == True:
+				print("PREMINE IS ON")
+				premine.premine_mode(pubkeys)
 
 		# self.mine = True
 		# self.utxo = utxo_set.Utxo_pool()
@@ -84,12 +91,17 @@ class Cli(cmd.Cmd):
 			utxo = req.text
 			pp.add_data(chain, 'blockchain.pickle')
 			pp.add_data(utxo, 'utxo.pickle')
-
-if __name__ == '__main__':
+def main():
 	PORT = cnf.getPortFromFile()
 	print("Port = ", PORT)
-	cli = Cli()
+	parser = argparse.ArgumentParser(description='Miner client, you know.You can see help menu after entering miner_cli and typing "help"')
+	parser.add_argument('-p', dest='feature', action='store_true', help='activates premine mode')
+	options = parser.parse_args()
+	cli = Cli(options.feature)
 	try:
 		cli.cmdloop()
 	except KeyboardInterrupt:
 		print("\nBye, have a nice day!")
+
+if __name__ == '__main__':
+	main()

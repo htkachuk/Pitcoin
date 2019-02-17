@@ -17,7 +17,7 @@ def submit_tx():
 	if request.method == 'POST':
 		next_transaction = request.get_data()
 		next_transaction = next_transaction.decode('utf-8')
-		print("Data ",next_transaction)
+		# print("Data ",next_transaction)
 		pending_pool.database(next_transaction)
 		return(str(next_transaction))
 
@@ -25,7 +25,6 @@ def submit_tx():
 def pending_transaction():
 	if request.method == 'GET':
 		data = pending_pool.get_data('pool.pickle')
-		print(data)
 		if data != False:
 			return str(data)
 		else:
@@ -159,6 +158,9 @@ def main():
 		try:
 			fd = open("port.txt", 'w')
 			fd.write(PORT)
+			fd.close()
+			fd = open("node", "w")
+			fd.write("0.0.0.0:" + PORT)
 			fd.close()
 			print("!!!Server port was saved in a file port.txt!!!")
 		except IOError:
