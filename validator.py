@@ -9,9 +9,33 @@ import requests
 import binascii
 from hashlib import sha256
 
+
+def consensus():
+	nodes = pp.read_nodes_from_file()
+	len_list = []
+	dicti = {}
+	for x in nodes:
+		dicti = {}
+		dicti["ip"] = x
+		try:
+			dicti["length"] = int(requests.get("http://" + x + "/chain/length").text)
+		except:
+			dicti["length"] = 0
+		len_list.append(dicti)
+	newlist = sorted(len_list, key=lambda k: k['length']) 
+	if (newlist[-1]['ip'] != nodes[0]):
+		req = requests.get("http://" + newlist[-1]['ip'] + "/chain")
+		chain = req.text
+		req = requests.get("http://" + newlist[-1]['ip'] + "/utxo")
+		utxo = req.text
+		pp.add_data(chain, 'blockchain.pickle')
+		pp.add_data(utxo, 'utxo.pickle')
+
+
 def check_reward_target(coinbase, port, block_hash):
 	req = requests.get("http://" + port + "/chain")
 	if req.text == "Something get wrong!\nYou have no chain":
+		print("ASFKASFOASF____________________")
 		consensus()
 		return True
 	chain = json.loads(req.text)
@@ -26,11 +50,6 @@ def check_reward_target(coinbase, port, block_hash):
 		return False
 	return True
 
-
-def consensus():
-	minercli = miner_cli.Cli()
-	minercli.do_consensus("")
-
 def get_last_block(port):
 	req = requests.get("http://" + port + "/block/last")
 	last_block = json.loads(req.text)
@@ -44,6 +63,7 @@ def block(block):
 		return False
 	last_block = get_last_block(port)
 	if last_block['hash'] != block['previous_hash'][0]:
+		print("BLOCK_______________________")
 		consensus()
 	if float(last_block['timestamp']) > float(block['timestamp'][0]):
 		return False

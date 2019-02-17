@@ -117,6 +117,7 @@ def receive_new_block():
 		block = request.form
 		if validator.block(block) == True:
 			print("Good")
+			print("SERVER____________________________")
 			validator.consensus()
 		validator.mining(1)
 		return "OK"

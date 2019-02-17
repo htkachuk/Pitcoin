@@ -70,27 +70,7 @@ class Cli(cmd.Cmd):
 				print("Unvalid node, please check it and use this command again")
 		else:
 			print("usage\tadd_node ip:port")
-
-	def do_consensus(self, args):
-		nodes = pp.read_nodes_from_file()
-		len_list = []
-		dicti = {}
-		for x in nodes:
-			dicti = {}
-			dicti["ip"] = x
-			try:
-				dicti["length"] = int(requests.get("http://" + x + "/chain/length").text)
-			except:
-				dicti["length"] = 0
-			len_list.append(dicti)
-		newlist = sorted(len_list, key=lambda k: k['length']) 
-		if (newlist[-1]['ip'] != nodes[0]):
-			req = requests.get("http://" + newlist[-1]['ip'] + "/chain")
-			chain = req.text
-			req = requests.get("http://" + newlist[-1]['ip'] + "/utxo")
-			utxo = req.text
-			pp.add_data(chain, 'blockchain.pickle')
-			pp.add_data(utxo, 'utxo.pickle')
+	
 def main():
 	PORT = cnf.getPortFromFile()
 	print("Port = ", PORT)

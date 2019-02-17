@@ -4,6 +4,18 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+addr1
+addr2
+addr3
+address
+blockchain.pickle
+minerkey
+node
+utxo.pickle
+wif1
+wif2
+wif3
+
 # C extensions
 *.so
 
