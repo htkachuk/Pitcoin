@@ -11,6 +11,9 @@ from hashlib import sha256
 
 def check_reward_target(coinbase, port, block_hash):
 	req = requests.get("http://" + port + "/chain")
+	if req.text == "Something get wrong!\nYou have no chain":
+		consensus()
+		return True
 	chain = json.loads(req.text)
 	reward = float(chain['reward'])
 	reward = reward * pow(10, 8)
