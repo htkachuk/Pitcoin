@@ -12,6 +12,7 @@ from hashlib import sha256
 
 
 def consensus():
+	print("I am here 1")
 	nodes = pp.read_nodes_from_file("node")
 	len_list = []
 	dicti = {}
@@ -29,8 +30,8 @@ def consensus():
 		chain = req.text
 		req = requests.get("http://" + newlist[-1]['ip'] + "/utxo")
 		utxo = req.text
-		pp.add_data(pickle.dumps(chain), 'blockchain.pickle')
-		pp.add_data(pickle.dumps(utxo), 'utxo.pickle')
+		pp.add_data(chain, 'blockchain.pickle')
+		pp.add_data(utxo, 'utxo.pickle')
 
 
 def check_reward_target(coinbase, port, block_hash):
@@ -38,6 +39,7 @@ def check_reward_target(coinbase, port, block_hash):
 	if req.text == "Something get wrong!\nYou have no chain":
 		consensus()
 		return True
+	print("I am in check_reward_target")
 	chain = json.loads(req.text)
 	reward = int(chain['reward'])
 	reward = reward * pow(10, 8)

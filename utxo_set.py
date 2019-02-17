@@ -5,6 +5,7 @@ import json
 import requests
 import wallet
 import codecs
+# from ast import literal_eval
 
 def add_output(tx_output, n, tx_hash): 
 #####
@@ -29,7 +30,10 @@ def add_output(tx_output, n, tx_hash):
 
 	i = 0
 	utxo_set = pp.get_data('utxo.pickle')
-	# print("Utxo in add_output ",utxo_set)
+
+
+	# if type(utxo_set) is str:
+	# 	utxo_set = literal_eval(utxo_set)
 	if utxo_set == False:
 		utxo_set = []
 	else:
@@ -98,6 +102,9 @@ def get_utxo_set(which, address):
 		utxo_set = pp.get_data('utxo.pickle')
 		if utxo_set != False:
 			for elem in utxo_set:
+				print("Elem in utxo", elem)
+				print("Elem ",elem['address'])
+				print("Input ",address)
 				if (elem['address'] == address):
 					utxo_set = elem['unspent_outputs']
 					i = 1

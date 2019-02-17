@@ -19,7 +19,10 @@ class Cli(cmd.Cmd):
 		self.doc_header ="For detail information use 'help _command_')"
 		self.blockchain = pp.get_data("blockchain.pickle")
 		if (self.blockchain == False or is_premine == True):
-			os.remove("utxo.pickle")
+			try:
+				os.remove("utxo.pickle")
+			except:
+				pass
 			self.blockchain = blockchain.Blockchain()
 			if is_premine == True:
 				print("PREMINE IS ON")

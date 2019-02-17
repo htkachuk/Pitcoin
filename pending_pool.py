@@ -7,7 +7,7 @@ import config
 import os
 import script
 from copy import deepcopy
-
+from ast import literal_eval
 
 def database(transaction):
 	try:
@@ -27,6 +27,8 @@ def get_data(name):
 	try:
 		with open(name, 'rb') as f:
 	 		pending_data = pickle.load(f)
+	 		if type(pending_data) is str:
+	 			pending_data = literal_eval(pending_data)
 	 		f.close()
 	 		return pending_data
 	except:
