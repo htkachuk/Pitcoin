@@ -115,6 +115,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-teamcoin/.vscode/settings.json
-teamcoin/port.txt
+
+
+teamcoin/.vscode
 teamcoin/port.txt
