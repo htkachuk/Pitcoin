@@ -68,7 +68,7 @@ class Output():
 		return output
 
 class Transaction():
-	def __init__(self, version, inputs, outputs, locktime, witness = 0):
+	def __init__(self, version, inputs, outputs, locktime):
 		self.version = get_int_lnf(version, 8)
 		self.sigwit = 0
 		if witness != 0:
@@ -151,15 +151,16 @@ class CoinbaseTransaction(Transaction):
 			f = open('minerkey', 'r')
 		except IOError:
 			print("Create file mainerkey with WIF key!!")
-			return
+			return None
 		private_key = wallet.WIF_to_key(f.read())
 		inputik = []
 		inputik.append(CoinbaseInput(height))
 		bitcoin_address = wallet.get_bitcoin_address(private_key)
-		print("Bitcoin address ", bitcoin_address)
+		# print("Bitcoin address ", bitcoin_address)
 		output = []
 		output.append(Output(reward * pow(10, 8), bitcoin_address))
 		Transaction.__init__(self, 1, inputik, output, 0)
+	
 	def get_info(self):
 		return Transaction.get_full_transaction(self)
 
