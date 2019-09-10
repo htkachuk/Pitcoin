@@ -32,11 +32,16 @@ class Block():
 		self.previous_hash = previous_hash
 		if previous_hash == 0:
 			self.transactions = self.create_coinbase(0)
+			if self.transactions == None:
+				self.error = True
+				return
 		else:
 			transactions = pending_pool.get_valid_transactions(3)
 			if transactions != '1':
 				self.transactions = transactions
 			tx = self.create_coinbase(self.height, reward)
+			if tx == None:
+				return None
 			self.transactions.insert(0, tx)
 		if previous_hash == 0:
 			first_hash = sha256(bytes(self.transactions, 'utf-8')).hexdigest()
@@ -50,7 +55,10 @@ class Block():
 
 	def create_coinbase(self, height, reward = 50):
 		tx = transaction.CoinbaseTransaction(height, reward)
-		tx = tx.get_info()
+		try:
+			tx = tx.get_info()
+		except:
+			return None
 		ser_trans = serializer.Serializer.serializer(tx)
 		dtx = serializer.Deserializer.deserializer(ser_trans, 1)
 		first_hash = sha256(bytes(ser_trans, 'utf-8')).hexdigest()

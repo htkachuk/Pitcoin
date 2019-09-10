@@ -39,9 +39,12 @@ class Blockchain():
 
 	def genesis_block(self):
 		new_block = block.Block(reward = self.reward)
+		if new_block.error == True:
+			return False
 		new_block.mine(self.target)
 		self.chain.append(new_block)
 		pp.add_data(self, 'blockchain.pickle')
+		return True
 
 	def reCalcDiff(self):
 		self.real_time = int(float(self.chain[0].timestamp) - float(self.chain[4].timestamp))

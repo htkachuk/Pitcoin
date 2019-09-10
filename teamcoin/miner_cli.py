@@ -27,7 +27,8 @@ class Cli(cmd.Cmd):
 			if is_premine == True:
 				print("PREMINE IS ON")
 				pubkeys = premine.createKeysAndAddresses()
-			self.blockchain.genesis_block()
+			if self.blockchain.genesis_block() == False:
+				exit(1)
 			if is_premine == True:
 				premine.premine_mode(pubkeys, self)
 
