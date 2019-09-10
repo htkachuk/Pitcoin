@@ -16,18 +16,11 @@ print
 CURVE_ORDER = SECP256k1.order
 
 def convert_to_WIF(privkey):
-	# try:
-	# 	f = open('privkey', 'r')
-	# except IOError:
-	# 	print("No file for WIF convertion!")
-	# 	exit(0)
-	# privkey = f.read()
 	privkey_v = 'ef' + privkey + '01'
 	first_sha256 = hashlib.sha256(binascii.unhexlify(privkey_v)).hexdigest()
 	second_sha256 = hashlib.sha256(binascii.unhexlify(first_sha256)).hexdigest()
 	final_key = privkey_v + second_sha256[:8]
 	WIF = base58.b58encode(binascii.unhexlify(final_key))
-	# WIF = binascii.hexlify(codecs.decode(WIF, 'hex')).decode()
 	return WIF
 
 def get_swaddress(private_key):
@@ -181,7 +174,6 @@ def get_hash(raw_transaction):
 	return hash_tx
 
 def get_raw_transaction(inputs_info, addr, my_addr, amount, balance, privkey, outputs):
-	# print("How much outputs we have ",len(outputs))
 	sig_key = []
 	for i in range(len(inputs_info)):
 		raws_inputiki = create_raw_input(inputs_info, i)
@@ -193,11 +185,8 @@ def get_raw_transaction(inputs_info, addr, my_addr, amount, balance, privkey, ou
 		sig_key.append(sign(privkey, hash_tx))
 	return sig_key, outputs, raws_inputiki 
 
-def send(addr, amount, privkey, where, sigwit):
-	if sigwit == 0:
-		my_addr = get_bitcoin_address(privkey)
-	else:
-		my_addr = get_swaddress(privkey)
+def send(addr, amount, privkey, where):
+	my_addr = get_bitcoin_address(privkey)
 	utxo_set = utxo.get_utxo_set(where, my_addr)
 	fee = int((amount * 0.1) / 100)
 	balance = utxo.check_balance(utxo_set)
@@ -215,7 +204,6 @@ def send(addr, amount, privkey, where, sigwit):
 		inputiki = create_inputs(inputs_info, sig_key)
 		tx = create_transaction(inputiki, outputs)
 	if sigwit == 1:
-		print(sig_key)
 	tx_sr = serializer.Serializer.serializer(tx)
 	return tx_sr
 

@@ -58,8 +58,8 @@ def chain_length():
 	if data != False:
 		if type(data) is dict:
 				lens = str(data['chain'][0]['height'])
-			else:
-				lens = str(data.chain[0].height)
+		else:
+			lens = str(data.chain[0].height)
 		return lens
 	else:
 		return("0")

@@ -71,20 +71,12 @@ class Transaction():
 	def __init__(self, version, inputs, outputs, locktime):
 		self.version = get_int_lnf(version, 8)
 		self.sigwit = 0
-		if witness != 0:
-			self.marker = '00'
-			self.flag = '01'
-			self.witness = []
-			self.sigwit = 1
 		self.input_count = self.count_arg(inputs)
 		self.inputs = []
 		# if self.input_count == '01':
 		# 	self.inputs.append(inputs)
 		# else:
 		for elem in inputs:
-			if witness != 0:
-				for i in range(2):
-					self.witness.append(witness)
 			self.inputs.append(elem)
 		self.output_count = self.count_arg(outputs)
 		self.outputs = []
@@ -151,7 +143,7 @@ class CoinbaseTransaction(Transaction):
 			f = open('minerkey', 'r')
 		except IOError:
 			print("Create file mainerkey with WIF key!!")
-			return None
+			return
 		private_key = wallet.WIF_to_key(f.read())
 		inputik = []
 		inputik.append(CoinbaseInput(height))

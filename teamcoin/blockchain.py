@@ -55,8 +55,6 @@ class Blockchain():
 		coef = self.calcCoeff()
 		self.diff = self.diff * coef
 		self.target = self.max_hash / self.diff 
-		print("new target = ", hex(int(self.target)))
-		print("new diff = ", hex(int(self.diff)))
 
 	def calcCoeff(self):
 		coef = self.ideal_time / self.real_time
@@ -116,14 +114,3 @@ def fromDiffToBits(diff):
 	res = hex(len(diff) // 2)[2:]
 	res += diff[0:6]
 	return (res)
-
-if __name__ == '__main__':
-	bc = Blockchain()
-	print(bc)
-	print(type(bc))
-	# print(int("2815ee000000000000000000000000000000000000000000", 16))
-	# print(floa)
-	# print(int(fromBitsToDiff("172e6f88"), 16))
-	# fromBitsToDiff("1d00ffff")
-	# print(15.1 > 15)
-	# print(range(bc.ideal_time - 3, bc.ideal_time + 3))

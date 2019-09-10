@@ -24,6 +24,7 @@ class Block():
 		self.record = _record
 
 	def __init__(self, reward, previous_hash = 0, height = 0):
+		self.error = False
 		self.height = height
 		self.reward = reward
 		self.transactions = []
@@ -63,7 +64,6 @@ class Block():
 		dtx = serializer.Deserializer.deserializer(ser_trans, 1)
 		first_hash = sha256(bytes(ser_trans, 'utf-8')).hexdigest()
 		hash_tx = sha256(bytes(first_hash, 'utf-8')).hexdigest()
-		# print(type(dtx))
 		utxo_set.add_to_pool(dtx, hash_tx)
 		return ser_trans
 	
@@ -84,21 +84,3 @@ class Block():
 		print("hash =\t", self.hash)
 		print("transactions =\t", self.transactions)
 		print("markle_root =\t", self.merkle)
-
-	# def get_block(self):
-	# 	block = {}
-	# 	block['height'] = self.height
-	# 	block['timestamp'] = str(self.timestamp)
-	# 	block['nonce'] = self.nonce
-	# 	block['previous_hash'] = self.previous_hash
-	# 	block['hash'] = self.hash
-	# 	block['transactions'] = self.transactions
-	# 	block['root'] = self.merkle
-	# 	return block
-
-def main():
-	block = Block()
-	print(block)
-
-if __name__ == '__main__':
-	main()

@@ -86,8 +86,6 @@ def get_script(txid, vout):
 	utxo_set = pp.get_data('utxo.pickle')
 	for utxo in utxo_set:
 		for unspent in utxo['unspent_outputs']:
-			# print(unspent['tx_hash_big_endian'])
-			# print(txid)
 			if unspent['tx_hash_big_endian'] == txid and hex(unspent['tx_output_n'])[2:] == vout:
 				return unspent['script']
 

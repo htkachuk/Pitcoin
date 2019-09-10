@@ -48,10 +48,10 @@ class Cli(cmd.Cmd):
 		if len(args) >= 2:
 			if args[0] == '-p':
 				i = 1
-				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Pitcoin", 0)
+				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Pitcoin")
 			elif args[0] == '-t':
 				i = 1
-				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Testnet", 0)
+				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Testnet")
 			
 			if i == 0:
 				print("Something get wrong! Use help command")
@@ -148,7 +148,6 @@ def create_hash(sender, recipient, amount):
 	return message
 
 def broadcast_command(transaction):
-	# requests.post("http://" + port + "/transaction/new", json = transaction)
 	cnf.broadcast_to_friend(transaction, '/transaction/new')
 	print("Successfuly broadcasted")
 
