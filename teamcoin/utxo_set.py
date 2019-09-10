@@ -109,6 +109,9 @@ def get_utxo_set(which, address):
 					utxo_set = elem['unspent_outputs']
 					i = 1
 					break
+		else:
+			print("Error there is not utxo! Use miner cli!")
+			return None
 		if i != 1:
 			utxo_set = 0
 	return utxo_set

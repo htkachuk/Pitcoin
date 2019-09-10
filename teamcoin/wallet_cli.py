@@ -49,15 +49,9 @@ class Cli(cmd.Cmd):
 			if args[0] == '-p':
 				i = 1
 				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Pitcoin", 0)
-			if args[0] == '-t':
+			elif args[0] == '-t':
 				i = 1
 				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Testnet", 0)
-			if args[0] == '-swp':
-				i = 1
-				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Pitcoin", 1)
-			if args[0] == '-swt':
-				i = 1
-				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Testnet", 1)
 			
 			if i == 0:
 				print("Something get wrong! Use help command")
@@ -87,36 +81,23 @@ class Cli(cmd.Cmd):
 		recipient address (if its sender, there is subtraction, in otherwise its
 		addition)"""
 		args = args.split(' ')
+		if (len(args) != 2):
+			print("usage:\nbalance -t(-p) address")
+			return
 		if args[0] == '-t':
 			which = "Testnet"
 		else:
 			which = "Pitcoin"
 		utxo_set = utxo.get_utxo_set(which, args[1])
+		if utxo_set == None:
+			return
 		balance = utxo.check_balance(utxo_set)
 		print("Your balance is\t" + '\033[1m' + str(balance) + '\033[0m')
-
-	def do_swnew(self, args):
-	# """'swnew' is using for generating address for segwit transactions. If you haven't used a command 
-	# 	new or import, you would be asked to provide your private key.  Bitcoin address is saved in 
-	# 	the file."""
-		if self.private_key == '0':
-			self.private_key = get_private_key()
-		# public_key = wallet.get_public_key(self.private_key)
-		# compressed_key = wallet.get_compressed_key(public_key)
-		# swaddr = get_bech32(compressed_key)
-		swaddr = wallet.get_swaddress(self.private_key)
-		print("Your sigwit address is:\n" + swaddr + "\nYou can find it in the file swaddress")
-		f = open('swaddress', 'a')
-		f.write(swaddr + "\n")
 
 	def get_data(self):
 		data = {}
 		data['transaction'] = self.transaction
 		data['private_key'] = self.private_key
-
-	def do_test(self, args):
-		print(wallet.bech32_address_from_compressed_publkey('0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798'))
-
 
 	def do_exit(self, args):
 		"""exit"""
