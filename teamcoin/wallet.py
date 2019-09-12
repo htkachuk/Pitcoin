@@ -11,7 +11,6 @@ from hashlib import sha256
 import struct
 from ecdsa.curves import SECP256k1
 import bech32
-print
 
 CURVE_ORDER = SECP256k1.order
 
@@ -136,7 +135,6 @@ def sign(priv_key, message):
 
 
 def create_raw_input(inputs_info, count):
-	# count = len(raw_inputs)
 	raw_inputs = []
 	i = 0
 	for info in inputs_info:
@@ -190,20 +188,15 @@ def send(addr, amount, privkey, where):
 	utxo_set = utxo.get_utxo_set(where, my_addr)
 	fee = int((amount * 0.1) / 100)
 	balance = utxo.check_balance(utxo_set)
-	print("Your balance: %d\n" % balance)
 	if balance < amount:
-		 print("Hey, hey, hey! Not so fast, you have not so much money!")
+		 print("\033[1;31;40mHey, hey, hey! Not so fast, you have not so much money!")
+		 print("\033[1;33;40mYour balance: %d\n" % balance)
 		 return
 	inputs_info, balance = utxo.get_inputs_info(utxo_set, (int(amount) + fee))
-	if sigwit == 0:
-		outputs = create_outputs(addr, my_addr, amount, balance, 0)
-	else:
-		outputs = create_outputs(addr, my_addr, amount, balance, 1)
+	outputs = create_outputs(addr, my_addr, amount, balance, 0)
 	sig_key, outputs, raw_inputs = get_raw_transaction(inputs_info, addr, my_addr, amount, balance, privkey, outputs)
-	if sigwit == 0:
-		inputiki = create_inputs(inputs_info, sig_key)
-		tx = create_transaction(inputiki, outputs)
-	if sigwit == 1:
+	inputiki = create_inputs(inputs_info, sig_key)
+	tx = create_transaction(inputiki, outputs)
 	tx_sr = serializer.Serializer.serializer(tx)
 	return tx_sr
 

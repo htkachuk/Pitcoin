@@ -5,7 +5,6 @@ import wallet
 class Serializer():
 	@staticmethod
 	def serializer(transaction):
-		# transaction = transaction.get_full_transaction()
 		if len(transaction) < 7:
 			transaction['marker'] = ''
 			transaction['flag'] = ''
@@ -46,8 +45,6 @@ class Deserializer():
 		transaction['inputs'] = []
 		if coinbase != 1:
 			j = 10
-			# i = 10
-			# j = i + 64
 			for elem in range(int(transaction['input_count'], 16)):
 				inputiki = {}
 				i = j
@@ -69,16 +66,13 @@ class Deserializer():
 				i = i + 8
 		else:
 			i = 230
-		# print(string[230:])
 		j = i + 2
 		transaction['output_count'] = string[i:j]
 		transaction['outputs'] = []
-		# print("How much outputs: ", int(transaction['output_count'], 16))
 		for elem in range(int(transaction['output_count'], 16)):
 			output = {}
 			i = j
 			j = i + 16
-			# print("KEK LOL", string[i:j])
 			output['Value'] = int(check_par(return_to_normal_form(string[i:j])), 16)
 			i = j
 			j = i + 2

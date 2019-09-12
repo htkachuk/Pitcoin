@@ -100,9 +100,6 @@ def get_utxo_set(which, address):
 		utxo_set = pp.get_data('utxo.pickle')
 		if utxo_set != False:
 			for elem in utxo_set:
-				print("Elem in utxo", elem)
-				print("Elem ",elem['address'])
-				print("Input ",address)
 				if (elem['address'] == address):
 					utxo_set = elem['unspent_outputs']
 					i = 1
