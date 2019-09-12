@@ -20,9 +20,9 @@ PORT = None
 class Cli(cmd.Cmd):
 	def __init__(self):
 		cmd.Cmd.__init__(self)
-		self.prompt = "฿ "
-		self.intro  = "\t\tWelcome to the bitcoin wallet\nHow to use? 'help'!!"
-		self.doc_header ="For detail information use 'help _command_')"
+		self.prompt = "\033[1;32;40m"+"฿ "
+		self.intro  = "\033[1;31;40m\t\tWelcome to the bitcoin wallet\n\033[1;34;40mHow to use? 'help'!!"
+		self.doc_header ="\033[1;33;40mFor detail information use 'help _command_')"
 		self.transaction = 1
 		self.swtransaction = 1
 		self.private_key = '0'
@@ -37,28 +37,26 @@ class Cli(cmd.Cmd):
 		if len(args.split(' ')) == 1:
 			self.private_key = import_command(args)
 		else:
-			print("usage\timport /path/to/file/with/WIF/Private/Key\n")
+			print("\033[1;31;40musage\timport /path/to/file/with/WIF/Private/Key\n")
 
 	def do_send(self, args):
 		"""send get three parameters flag: -t means create transaction for broadcating to testnet or -p means broadcas to Pitcoin
 		 recipient and amount and build, sign and serialize transaction"""
 
+		if self.private_key == '0':
+			print("\033[1;31;40mImport private key firstly!")
+			return
+
 		args = args.split(' ')
-		i = 0
 		if len(args) >= 2:
 			if args[0] == '-p':
-				i = 1
 				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Pitcoin")
-			elif args[0] == '-t':
-				i = 1
+			else:
 				self.transaction = wallet.send(args[1], int(args[2]), self.private_key, "Testnet")
-			
-			if i == 0:
-				print("Something get wrong! Use help command")
-				return
-			print(self.transaction)
+			if self.transaction != None:
+				print(self.transaction)
 		else:
-			print("usage\n\tsend -flag address_of_recipient amount\n")
+			print("\033[1;31;40musage\n\tsend -flag address_of_recipient amount\n")
 
 	def do_broadcast(self, args):
 		""" broadcast - send POST request with serialized transaction data to
@@ -70,7 +68,6 @@ class Cli(cmd.Cmd):
 				check = blockcypher.pushtx(tx_hex = self.transaction, coin_symbol='btc-testnet', api_key = API_KEY)
 			else:
 				broadcast_command(self.transaction)
-				# deserialized_transaction = serializer.Deserializer.deserializer(self.transaction, 0)
 				self.transaction = 1
 		else:
 			print('Use command send before broadcast command!\n')
@@ -82,7 +79,7 @@ class Cli(cmd.Cmd):
 		addition)"""
 		args = args.split(' ')
 		if (len(args) != 2):
-			print("usage:\nbalance -t(-p) address")
+			print("\033[1;31;40musage:\nbalance -t(-p) address")
 			return
 		if args[0] == '-t':
 			which = "Testnet"
@@ -92,7 +89,7 @@ class Cli(cmd.Cmd):
 		if utxo_set == None:
 			return
 		balance = utxo.check_balance(utxo_set)
-		print("Your balance is\t" + '\033[1m' + str(balance) + '\033[0m')
+		print("\033[1;33;40mYour balance is\t\033[1;37;40m" + str(balance))
 
 	def get_data(self):
 		data = {}
@@ -101,18 +98,18 @@ class Cli(cmd.Cmd):
 
 	def do_exit(self, args):
 		"""exit"""
-		print("\nBye, have a nice day!")
+		print("\033[1;34;40m\nBye, have a nice day!")
 		exit(0)
 
 def output(private_key):
 	if private_key == 0:
 		private_key = wallet.get_private_key()
-	print("Your private key:\n" + private_key + "Please keep it in secret!!!")
+	print("\033[1;33;40mYour private key: \033[1;37;40m" + private_key + "\033[1;31;40m\nPlease keep it in secret!!!")
 	wif_key = wallet.convert_to_WIF(private_key)
-	print("Your private key in wif format is:")
+	print("\033[1;33;40mYour private key in wif format is: \033[1;37;40m")
 	print(wif_key)
 	bitcoin_address = wallet.get_bitcoin_address(private_key)
-	print("Your public address is:\n" + bitcoin_address + "\nYou can find it in the file address")
+	print("\033[1;33;40mYour public address is: \033[1;37;40m" + bitcoin_address + "\033[1;33;40m\nYou can find it in the file address\033[1;37;40m")
 	f = open('address', 'a')
 	f.write(bitcoin_address + "\n")
 	return private_key
@@ -124,13 +121,13 @@ def import_command(arg):
 		private_key = output(private_key)
 		return private_key
 	except IOError:
-		print("usage:\timport /path/to/file/with/WIF/Private/Key\n")
+		print("\033[1;31;40musage:\timport /path/to/file/with/WIF/Private/Key\n")
 	
 def get_current_private_key():
 	print("Enter your private key:\t")
 	private_key = input()
 	if (len(private_key) != 64 and len(private_key) != 51):
-		print("Invalid private key\n")
+		print("\033[1;31;40mInvalid private key\n")
 		exit(0)
 	if len(private_key) != 64:
 		private_key = wallet.WIF_to_key(private_key)
@@ -153,12 +150,11 @@ def broadcast_command(transaction):
 
 def main():
 	PORT = cnf.getPortFromFile()
-	print("Port = ", PORT)
 	cli = Cli()
 	try:
 		cli.cmdloop()
 	except KeyboardInterrupt:
-		print("Bye, have a nice day!")
+		print("\033[1;34;40mBye, have a nice day!")
 
 if __name__ == '__main__':
 	main()
